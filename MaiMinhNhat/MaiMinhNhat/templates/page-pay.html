@@ -1,0 +1,21 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Địa chỉ{% endblock %}
+
+{% block content %}
+
+<h2>Thông tin nhận hàng</h2>
+    <form id="checkoutForm" method="POST" action="{{ url_for('pay') }}">
+        <label for="name">Tên người nhận:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="phone">Số điện thoại:</label><br>
+        <input type="text" id="phone" name="phone" required><br><br>
+
+        <label for="address">Địa chỉ:</label><br>
+        <textarea id="address" name="address" required></textarea><br><br>
+
+        <button type="submit" onclick="pay()">Thanh Toán</button>
+    </form>
+
+{% endblock %}

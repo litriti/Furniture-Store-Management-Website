@@ -1,0 +1,35 @@
+<section class="myinfo p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-1"><i class="fa-solid fa-phone-volume text-primary"></i></div>
+                    <div class="col-md-2"><i class="fa-solid fa-circle-info text-primary"></i></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <form class="d-flex search-form" action="/">
+                    <input class="form-control me-2 search-input" name="keyword" type="text"
+                           placeholder="Bạn cần tìm gì ?">
+                    <button class="btn btn-link p-0 search-button" type="submit">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-md-2"><span><i class="fa-solid fa-location-dot text-primary"></i></span></div>
+                    <div class="col-md-2">
+                        <a class="nav-link text-secondary" href="/cart">
+                            <i class="fa-solid fa-cart-shopping text-primary"></i>
+                            <span class="position-absolute translate-middle badge rounded-pill bg-danger cart-counter">
+                                {{ cart_stats.total_quantity }}
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

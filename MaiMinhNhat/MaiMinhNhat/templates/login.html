@@ -1,0 +1,72 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Đăng nhập{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="login-form p-4 shadow-lg rounded">
+        <h1 class="text-center text-info mt-1">ĐĂNG NHẬP NGƯỜI DÙNG</h1>
+        {% if err_msg %}
+        <div class="alert alert-danger">{{ err_msg }}</div>
+        {% endif %}
+        <form method="post">
+            <div class="form-floating mb-3 mt-3">
+                <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập" name="username" pattern="[a-zA-Z0-9]*" required>
+                <label for="username">Tên đăng nhập</label>
+            </div>
+
+            <div class="form-floating mb-3 mt-3 position-relative">
+                <input type="password" class="form-control" id="password" placeholder="Mật khẩu" name="password" required>
+                <label for="password">Mật khẩu</label>
+                <span class="password-toggle" id="togglePassword">
+                    <i class="fas fa-eye" id="eyeIcon"></i>
+                </span>
+            </div>
+
+            <div class="form-floating mt-3 mb-3">
+                <button class="btn btn-success w-100" type="submit">Đăng nhập</button>
+            </div>
+        </form>
+        <div class="text-center mt-3">
+            <p>Bạn chưa có tài khoản? <a href="/register" class="text-decoration-none">Đăng ký</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- CSS cho style tương tự form đăng ký -->
+<style>
+    .login-form {
+        background-color: #031633; /* Màu nền xanh đen đậm */
+        max-width: 400px; /* Thu gọn form */
+        border-radius: 8px;
+        border: 2px solid #6EA8FE; /* Viền màu xanh nhạt */
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+</style>
+
+<!-- Font Awesome cho biểu tượng con mắt -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<!-- JavaScript để ẩn hiện mật khẩu -->
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        // Toggle the type attribute
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // Toggle the eye icon
+        eyeIcon.classList.toggle('fa-eye');
+        eyeIcon.classList.toggle('fa-eye-slash');
+    });
+</script>
+{% endblock %}

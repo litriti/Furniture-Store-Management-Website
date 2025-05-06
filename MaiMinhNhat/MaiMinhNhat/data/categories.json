@@ -1,0 +1,20 @@
+[{
+  "id": 1,
+  "name": "Phòng Khách"
+}, {
+  "id": 2,
+  "name": "Phòng Ngủ"
+}, {
+  "id": 3,
+  "name": "Phòng Ăn"
+},  {
+  "id": 4,
+  "name": "Phòng Làm Việc"
+}, {
+  "id": 5,
+  "name": "Tủ Bếp"
+},  {
+  "id": 6,
+  "name": "Ngoại Thất"
+}
+]

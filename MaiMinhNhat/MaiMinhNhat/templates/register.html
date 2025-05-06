@@ -1,0 +1,255 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Đăng ký{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="registration-form p-4 shadow-lg rounded">
+        <h1 class="text-center text-info mt-1">ĐĂNG KÝ NGƯỜI DÙNG</h1>
+        {% if err_msg %}
+        <div class="alert alert-danger">{{ err_msg }}</div>
+        {% endif %}
+        {% if err_msg_2 %}
+        <div class="alert alert-danger">{{ err_msg_2 }}</div>
+        {% endif %}
+        <form method="post" action="/register" enctype="multipart/form-data" id="registrationForm">
+            <div class="form-floating mb-3 mt-3">
+                <input type="text" class="form-control" id="name" placeholder="Họ tên" name="name" required>
+                <label for="name">Họ tên</label>
+            </div>
+
+            <div class="form-floating mb-3 mt-3">
+                <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập" name="username" required>
+                <label for="username">Tên đăng nhập</label>
+            </div>
+
+            <div class="form-floating mt-3 mb-3 position-relative">
+                <input type="password" class="form-control" id="password" placeholder="Mật khẩu" name="password" required>
+                <label for="password">Mật khẩu</label>
+                <span class="password-toggle" id="togglePassword">
+                    <i class="fas fa-eye" id="eyeIconPassword"></i>
+                </span>
+            </div>
+
+            <div class="form-floating mt-3 mb-3 position-relative">
+                <input type="password" class="form-control" id="confirm" placeholder="Xác nhận mật khẩu" name="confirm" required>
+                <label for="confirm">Xác nhận mật khẩu</label>
+                <span class="password-toggle" id="toggleConfirmPassword">
+                    <i class="fas fa-eye" id="eyeIconConfirm"></i>
+                </span>
+            </div>
+
+            <div class="form-group mt-3 mb-3 text-center">
+                <label for="avatar" class="d-block">Ảnh đại diện</label>
+                <label for="avatar" class="upload-avatar">
+                    <input type="file" accept=".png,.jpg" class="d-none" id="avatar" name="avatar" onchange="previewAvatar(event)">
+                    <div class="avatar-placeholder">
+                        <img id="avatarPreview" src="#" alt="Ảnh đại diện" style="display: none; width: 80px; height: 80px; border-radius: 50%;">
+                        <span id="plusIcon" class="plus-icon">+</span>
+                    </div>
+                </label>
+            </div>
+
+            <div class="form-floating mt-3 mb-3">
+                <button class="btn btn-success w-100" type="submit">Đăng ký tài khoản</button>
+            </div>
+        </form>
+    </div>
+    <div id="loading" style="display: none;">
+    <div class="spinner"></div>
+</div>
+
+</div>
+
+<!-- Modal thông báo -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Đăng ký tài khoản thành công!
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thông báo không thành công -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Tài khoản đã tồn tại. Vui lòng thử lại.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript để xem trước ảnh đại diện và hiển thị modal -->
+<script>
+    function showLoading() {
+        document.getElementById("loading").style.display = "flex";
+    }
+
+    function hideLoading() {
+        document.getElementById("loading").style.display = "none";
+    }
+
+
+    function previewAvatar(event) {
+        const input = event.target;
+        const preview = document.getElementById('avatarPreview');
+        const plusIcon = document.getElementById('plusIcon');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                plusIcon.style.display = 'none';
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Hiển thị modal thông báo khi đăng ký thành công
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Ngăn không cho form gửi đi ngay lập tức
+        showLoading(); // Hiển thị spinner
+        const formData = new FormData(this);
+
+        fetch('/register', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            hideLoading(); // Ẩn spinner sau khi hoàn thành
+            if (response.ok) {
+                // Hiển thị modal thông báo
+                const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show();
+
+                // Tự động ẩn modal sau 1 giây
+                setTimeout(() => {
+                    successModal.hide();
+                    window.location.href = '/login';
+                }, 3000);
+
+                // Reset form nếu cần
+                this.reset();
+                document.getElementById('avatarPreview').style.display = 'none';
+                document.getElementById('plusIcon').style.display = 'block';
+            } else {
+                // Hiển thị modal thông báo lỗi
+                const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                errorModal.show();
+
+                // Tự động ẩn modal sau 1 giây
+                setTimeout(() => {
+                    errorModal.hide();
+                }, 3000);
+            }
+        })
+        .catch(error => {
+            hideLoading(); // Ẩn spinner nếu có lỗi
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra. Vui lòng thử lại.');
+        });
+    });
+
+    // JavaScript để ẩn hiện mật khẩu
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIconPassword');
+
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        eyeIcon.classList.toggle('fa-eye');
+        eyeIcon.classList.toggle('fa-eye-slash');
+    });
+
+    document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+        const confirmInput = document.getElementById('confirm');
+        const eyeIcon = document.getElementById('eyeIconConfirm');
+
+        const type = confirmInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmInput.setAttribute('type', type);
+
+        eyeIcon.classList.toggle('fa-eye');
+        eyeIcon.classList.toggle('fa-eye-slash');
+    });
+
+</script>
+
+<!-- CSS cho style của avatar -->
+<style>
+    #loading {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+}
+
+    .spinner {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #3498db;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+       100% { transform: rotate(360deg); }
+    }
+
+    .registration-form {
+        background-color: #031633; /* Màu nền xanh đen đậm */
+        max-width: 400px; /* Thu gọn form */
+        border-radius: 8px;
+        border: 2px solid #6EA8FE; /* Viền màu xanh nhạt */
+    }
+
+    .avatar-placeholder {
+        width: 80px;
+        height: 80px;
+        border: 2px dashed #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .plus-icon {
+        font-size: 2rem;
+        line-height: 1;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+</style>
+{% endblock %}

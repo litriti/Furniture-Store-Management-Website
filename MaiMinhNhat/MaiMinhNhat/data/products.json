@@ -1,0 +1,107 @@
+[{
+  "id": 1,
+  "name": "Sofa phòng khách 1",
+  "description": "sofa",
+  "price": 12373000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974367/mdyovhthoh7nvmrbqrmb.jpg",
+  "category_id": 1
+}, {
+  "id": 2,
+  "name": "Sofa phòng khách 2",
+  "description": "sofa",
+  "price": 10273000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974367/dwq2g1aemopubmqaf1sj.jpg",
+  "category_id": 1
+}, {
+  "id": 3,
+  "name": "Bàn nước phòng khách 1 ",
+  "description": "Bàn nước",
+  "price": 5432000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974367/h6gji7zo2stv9lgt3jkr.jpg",
+  "category_id": 1
+}, {
+  "id": 4,
+  "name": "Bàn nước phòng khách 2",
+  "description": "Bàn nước",
+  "price": 7209000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974367/x6heij5vudw3bjj5we0h.jpg",
+  "category_id": 1
+}, {
+  "id": 5,
+  "name": "Đèn trang trí sân vườn",
+  "description": "Đèn",
+  "price": 4102000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974367/ivkul8vko6rqf6hopvbc.jpg",
+  "category_id": 6
+}, {
+  "id": 6,
+  "name": "Đèn trang trí phòng",
+  "description": "abc",
+  "price": 3390000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974367/jjygwew6sxptukhc8p8e.jpg",
+  "category_id": 6
+}, {
+  "id": 7,
+  "name": "Giường ngủ xám",
+  "description": "Giường",
+  "price": 25253000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974367/x96ncm4p6q3alrwgwxnz.jpg",
+  "category_id": 2
+}, {
+  "id": 8,
+  "name": "Tủ âm tường phòng ngủ",
+  "description": "Tủ",
+  "price": 1171000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974368/d7brhyrpanfphfwkczrb.jpg",
+  "category_id": 2
+}, {
+  "id": 9,
+  "name": "Nệm xám lò xo",
+  "description": "Nệm",
+  "price": 12423000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974368/i10kp7xp1e8ipqm0zk2x.jpg",
+  "category_id": 2
+}, {
+  "id": 10,
+  "name": "Tủ bếp xanh dương",
+  "description": "Bộ tủ bếp xanh dương họa tiết",
+  "price": 54000000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974368/qzxr5puwigpogz32vlg1.jpg",
+  "category_id": 5
+}, {
+  "id": 11,
+  "name": "Bộ tủ bếp xám",
+  "description": "Tủ bếp xám basic",
+  "price": 51153000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974368/fud1byr6ciyqe8t2qhqm.jpg",
+  "category_id": 5
+}, {
+  "id": 12,
+  "name": "Bàn ăn gỗ",
+  "description": "Bàn gỗ lim",
+  "price": 8425000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974367/q7mgxsmcscsmzslbgz8m.jpg",
+  "category_id": 3
+}, {
+  "id": 13,
+  "name": "Ghế ăn bọc vải nỉ",
+  "description": "ghế ăn xanh dương",
+  "price": 699000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974367/epej6tcscl4gtpary1ww.jpg",
+  "category_id": 3
+}, {
+  "id": 14,
+  "name": "Bàn làm việc",
+  "description": "bàn làm việc bằng gỗ",
+  "price": 15900000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974367/rc9gx7bmlcd2qtatb9zw.jpg",
+  "category_id": 4
+}, {
+  "id": 15,
+  "name": "Ghế giám đốc bọc da ",
+  "description": "ghế làm việc",
+  "price": 12090000,
+  "image": "https://res.cloudinary.com/dw9r0q4hm/image/upload/v1723974367/r17hig2onlnvgjfkogs0.jpg",
+  "category_id": 4
+}
+]

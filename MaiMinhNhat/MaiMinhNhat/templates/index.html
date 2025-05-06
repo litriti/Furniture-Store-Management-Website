@@ -1,0 +1,107 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Trang chủ{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-2">
+        <div>
+            <form id="sortForm" method="get">
+                <!-- Giữ lại các tham số khác trong URL khi sắp xếp -->
+                {% if request.args.get('q') %}
+                <input type="hidden" name="q" value="{{ request.args.get('q') }}">
+                {% endif %}
+                {% if request.args.get('category_id') %}
+                <input type="hidden" name="category_id" value="{{ request.args.get('category_id') }}">
+                {% endif %}
+                {% if request.args.get('page') %}
+                <input type="hidden" name="page" value="{{ request.args.get('page') }}">
+                {% endif %}
+                <label for="sort_order">Sắp xếp:</label>
+                <select name="sort_order" id="sort_order" class="sort-custom" onchange="this.form.submit()">
+                    <option value="" {% if not request.args.get(
+                    'sort_order') %}selected{% endif %}>Mặc định</option>
+
+                    <option value="price_asc" {% if request.args.get(
+                    'sort_order') == 'price_asc' %}selected{% endif %}>
+                    Giá tăng dần
+                    </option>
+
+                    <option value="price_desc" {% if request.args.get(
+                    'sort_order') == 'price_desc' %}selected{% endif %}>
+                    Giá giảm dần
+                    </option>
+
+                    <option value="name_asc" {% if request.args.get(
+                    'sort_order') == 'name_asc' %}selected{% endif %}>
+                    Tên A-Z
+                    </option>
+
+                    <option value="name_desc" {% if request.args.get(
+                    'sort_order') == 'name_desc' %}selected{% endif %}>
+                    Tên Z-A
+                    </option>
+                </select>
+
+            </form>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div class="row">
+            {% if products %}
+            {% for p in products %}
+            <div class="col-md-3 col-sm-9" style="padding:1rem;">
+                <div class="card">
+                    <a href="/products/{{p.id}}"><img class="card-img-top" src="{{ p.image }}" alt="{{ p.name }}"></a>
+                    <div class="card-body">
+                        <h4 class="card-title product-name">{{ p.name }}</h4>
+                        <p class="card-text">{{ "{:,.0f}".format(p.price) }} VNĐ</p>
+                        <a href="/products/{{p.id}}" class="btn btn-custom">Xem chi tiết</a>
+                        <a href="javascript:;" onclick="addToCart({{p.id}}, '{{p.name}}', {{p.price}})"
+                           class="btn btn-custom"><i class="fa-solid fa-cart-plus"></i></a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% else %}
+            <p class="text-danger">Không có sản phẩm nào!</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<!--{% if pages > 1 %}-->
+<!--    <ul class="pagination mt-1 justify-content-center">-->
+<!--        {% for i in range(1, pages+1) %}-->
+<!--        <li class="page-item {% if request.args.get('page', 1)|int == i %}active{% endif %}">-->
+<!--            <a class="page-link"-->
+<!--               href="/?page={{i}}{% if request.args.get('sort_by') %}&sort_by={{ request.args.get('sort_by') }}{% endif %}">{{i}}</a>-->
+<!--        </li>-->
+<!--        {% endfor %}-->
+<!--    </ul>-->
+<!--{% endif %}-->
+
+{% if (pages > 1 ) %}
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-2"></div>
+    <div class="col-md-2"></div>
+    <div class="page_redirect col-md-2">
+        {% for i in range(1, pages+1) %}
+        <a href="/?page={{i}}{% if request.args.get('sort_by') %}&sort_by={{ request.args.get('sort_by') }}{% endif %}">
+            <p class="{% if request.args.get('page', 1)|int == i %}active{% endif %}">{{i}}</p>
+        </a>
+        {% endfor %}
+    </div>
+    <div class="col-md-2"></div>
+</div>
+
+
+{% endif %}
+
+
+
+{% endblock %}

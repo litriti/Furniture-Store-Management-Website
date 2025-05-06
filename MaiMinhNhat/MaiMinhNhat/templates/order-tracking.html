@@ -1,0 +1,94 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Theo dõi đơn hàng{% endblock %}
+
+{% block content %}
+<h1 class="text-center text-info mt-1">ĐƠN HÀNG CỦA BẠN</h1>
+<div class="container my-4">
+    <h2>Tất cả đơn hàng</h2>
+    <div class="row">
+        {% if receipt %}
+        {% for r in receipt %}
+        <div class="col-md-12 mb-3">
+            <div class="card">
+                <div class="card-header" style="cursor: pointer;" onclick="toggleDetails('{{ r.id }}')">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 "><strong>Đơn hàng #{{ r.id }}</strong> - {{ current_user.name }}</div>
+                        <div class="col-md-3  ">Trạng thái đơn hàng: {{ status_labels[r.order_status] }}</div>
+                        <div class="col-md-3 "></div>
+                        <div class="col-md-3  ">
+                            {% if status_labels[r.order_status] == "Đã giao hàng" %}
+                            <button class="btn btn-order-custom btn-sm " onclick="confirmReceipt('{{ r.id }}')">Đã nhận
+                                hàng
+                            </button>
+                            {% endif %}
+                            <a class="float-end"><i class="fa-solid fa-arrow-down"></i></a>
+                            <!-- Mũi tên chỉ xuống -->
+                        </div>
+                    </div>
+                </div>
+                <div id="receipt_details_{{ r.id }}" class="card-body d-none">
+                    <h5>Chi tiết đơn hàng</h5>
+                    <ul class="list-group">
+                        <!-- Tiêu đề cột -->
+                        <li class="list-group-item d-flex font-weight-bold">
+                            <div class="row w-100">
+                                <div class="col-md-1">STT</div>
+                                <div class="col-md-3">Tên sản phẩm</div>
+                                <div class="col-md-3 text-left">Số lượng</div>
+                                <div class="col-md-3 text-center">Giá</div>
+                                <div class="col-md-2 ">Đánh Giá</div>
+                            </div>
+                        </li>
+                        {% for d in receipt_details %}
+                        {% if d.receipt_id == r.id %}
+                        {% set item_total = d.price * d.quantity %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="row w-100">
+                                <div class="col-md-1">{{ loop.index }}</div>
+                                {% for p in products %}
+                                {% if d.product_id == p.id %}
+                                <div class="col-md-3 text-truncate" style="max-width: 200px;">{{ p.name }}</div>
+                                {% endif %}
+                                {% endfor %}
+                                <div class="col-md-3 text-center">{{ d.quantity }}</div>
+                                <div class="col-md-3 text-end">{{ "{:,.0f}".format(item_total) }} VNĐ</div>
+                                <div class="col-md-2 text-center">
+                                    {% if status_labels[r.order_status] == "Đang giao hàng" %}
+                                    {% elif status_labels[r.order_status] == "Hoàn thành" %}
+                                    {% if d.is_comment_allowed %}
+                                        {% for p in products %}
+                                        {% if d.product_id == p.id %}
+                                    <a href="/products/{{ p.id }}" class="btn text-center">Đánh giá</a>
+                                        {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                    <span class="text-muted">Đã đóng đánh giá</span>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        <li class="list-group-item font-weight-bold">
+                            <div class="row w-100">
+                                <div class="col-md-9">Tổng tiền:</div>
+                                <div class="col-md-3 text-end" id="total_{{ r.id + 1 }}">
+                                    {{ "{:,.0f}".format(temp[r.id]) }} VNĐ
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-danger">Bạn chưa có đơn hàng nào!!! </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,239 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Chi tiết sản phẩm{% endblock %}
+
+{% block content %}
+
+<div class="container product-details mt-4">
+    <div class="row">
+        <div class="col-md-5 col-12">
+            <img src="{{product.image}}" class="img-fluid rounded shadow" alt="{{ product.name }}"/>
+        </div>
+        <div class="col-md-7 col-12">
+            <div class="row">
+                <div class="col text-wrap">
+                    <h1 class="product-title">{{ product.name }}</h1>
+                    <p class="product-description">{{ product.description|safe }}</p>
+                    <h3 class="product-price">{{ "{:,.0f}".format(product.price) }} VNĐ</h3>
+                    <div class="product-tags mb-3">
+                        {% for t in product.tags %}
+                        <span class="badge bg-info text-dark me-1">{{t.name}}</span>
+                        {% endfor %}
+                    </div>
+                    <a href="javascript:;" onclick="addToCart({{ product.id }}, '{{ product.name }}', {{ product.price }})"
+                       class="btn btn-success">Thêm vào giỏ hàng</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if current_user.is_authenticated %}
+    <div class="mt-3 comment-form">
+        <h5>Bình luận về sản phẩm</h5>
+        <div class="form-floating mb-2">
+            <textarea class="form-control" id="content" name="text" placeholder="Nội dung bình luận" rows="3"></textarea>
+            <label for="content">Nội dung bình luận</label>
+        </div>
+        <button class="btn btn-custom" onclick="addComment({{ product.id }})">Bình luận</button>
+    </div>
+    {% else %}
+    <p>Vui lòng <a href="/login?next=/products/{{product.id}}">đăng nhập</a> để bình luận!</p>
+    {% endif %}
+
+    <h4 class="mt-4">Bình luận</h4>
+    <ul class="list-group comment-list" id="myComments">
+        {% for c in comments %}
+        <li class="list-group-item comment_custom mb-2">
+            <div class="row">
+                <div class="col-md-1 col-4">
+                    <img class="img-fluid rounded-circle" src="{{ c.user.avatar }}" alt="{{ c.user.name }}"/>
+                </div>
+                <div class="col-md-11 col-8">
+                    <div class="row">
+                        <p class="fw-bold">{{ c.user.name }}</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <p>{{ c.content }}</p>
+                        </div>
+                        <div class="col-md-2">
+                            <p class="created-date text-muted">{{ c.created_date }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="suggested-products mt-4">
+    <h2>Sản phẩm gợi ý</h2>
+    <div class="row">
+        {% for suggested_product in suggested_products %}
+        <div class="col-md-3 col-6 mb-4">
+            <div class="card shadow border-0">
+                <img src="{{ suggested_product.image }}" class="card-img-top" alt="{{ suggested_product.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ suggested_product.name }}</h5>
+                    <p class="card-text">{{ "{:,.0f}".format(suggested_product.price) }} VNĐ</p>
+                    <a href="{{ url_for('details', id=suggested_product.id) }}" class="btn btn-primary">Xem chi tiết</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment-with-locales.min.js"></script>
+<script src="{{ url_for('static', filename='js/details.js') }}"></script>
+<script>
+    window.onload = function() {
+        let dates = document.getElementsByClassName("created-date");
+        for (let d of dates)
+            d.innerText = moment(d.innerText).locale('vi').fromNow();
+    }
+</script>
+
+<style>
+    .product-details {
+        background-color: #212529; /* Màu nền sáng hơn */
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .product-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+
+    }
+
+    .product-description {
+        font-size: 1rem;
+        color: #6c757d;
+    }
+
+    .product-price {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #28a745; /* Màu xanh lá cho giá */
+    }
+
+    .comment-list {
+        max-height: 300px; /* Giới hạn chiều cao danh sách bình luận */
+        overflow-y: auto; /* Cuộn khi vượt quá chiều cao */
+    }
+
+    .comment_custom {
+
+        border-radius: 5px; /* Bo góc */
+    }
+
+    .suggested-products h2 {
+        margin-top: 20px;
+        margin-bottom: 15px;
+        color: #343a40;
+    }
+
+    .btn-custom {
+        background-color: # 8B008B; /* Màu xanh cho nút */
+        border: none;
+    }
+
+    .btn-custom:hover {
+        background-color: # 8B008B; /* Màu xanh đậm khi hover */
+    }
+</style>
+<!--<div class="container product-details">-->
+<!--    <div class="row">-->
+<!--        <div class="col-md-5 col-12">-->
+<!--            <img src="{{product.image}}" class="img-fluid rounded"/>-->
+<!--        </div>-->
+<!--        <div class="col-md-7 col-12">-->
+<!--            <div class="row">-->
+<!--                <div class="col text-wrap">-->
+<!--                    <h1 class="product-title">{{ product.name }}</h1>-->
+<!--                    <p>{{ product.description|safe }}</p>-->
+<!--                    <h3 class="product-price">{{ "{:,.0f}".format(product.price) }} VNĐ</h3>-->
+<!--                    <div class="product-tags">-->
+<!--                        {% for t in product.tags %}-->
+<!--                        <span class="badge">{{t.name}}</span>-->
+<!--                        {% endfor %}-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="row">-->
+<!--                <a href="javascript:;" onclick="addToCart({{ product.id }}, '{{ product.name }}', {{ product.price }})"-->
+<!--                   class="btn btn-custom">Thêm vào giỏ hàng</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    {% if current_user.is_authenticated %}-->
+<!--    <div class="mt-2 mb-2 comment-form">-->
+<!--        <div class="form-floating mb-2">-->
+<!--            <textarea class="form-control" id="content" name="text" placeholder="Nội dung bình luận"></textarea>-->
+<!--            <label for="content">Nội dung bình luận</label>-->
+<!--        </div>-->
+<!--        <button class="btn" onclick="addComment({{ product.id }})">Bình luận</button>-->
+<!--    </div>-->
+<!--    {% else %}-->
+<!--    <p>Vui lòng <a href="/login?next=/products/{{product.id}}">đăng nhập</a> để bình luận!</p>-->
+<!--    {% endif %}-->
+
+<!--    <ul class="list-group comment-list" id="myComments">-->
+<!--        {% for c in comments %}-->
+<!--        <li class="list-group-item comment_custom">-->
+<!--            <div class="row">-->
+<!--                <div class="col-md-1 col-4">-->
+<!--                    <img class="img-fluid rounded-circle"-->
+<!--                         src="{{ c.user.avatar }}"/>-->
+<!--                </div>-->
+<!--                <div class="col-md-11 col-8">-->
+<!--                    <div class="row">-->
+<!--                        <p>{{ c.user.name }}</p>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-10">-->
+<!--                            <p>{{ c.content }}</p>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-2">-->
+<!--                            <p class="created-date">{{ c.created_date }}</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </li>-->
+<!--        {% endfor %}-->
+<!--    </ul>-->
+<!--</div>-->
+<!--<div class="suggested-products mt-4">-->
+<!--    <h2>Sản phẩm gợi ý</h2>-->
+<!--    <div class="row">-->
+<!--        {% for suggested_product in suggested_products %}-->
+<!--        <div class="col-md-3 col-6 mb-4">-->
+<!--            <div class="card">-->
+<!--                <img src="{{ suggested_product.image }}" class="card-img-top" alt="{{ suggested_product.name }}">-->
+<!--                <div class="card-body">-->
+<!--                    <h5 class="card-title">{{ suggested_product.name }}</h5>-->
+<!--                    <p class="card-text">{{ "{:,.0f}".format(suggested_product.price) }} VNĐ</p>-->
+<!--                    <a href="{{ url_for('details', id=suggested_product.id) }}" class="btn btn-primary">Xem chi tiết</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        {% endfor %}-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment-with-locales.min.js"></script>-->
+<!--<script src="{{ url_for('static', filename='js/details.js') }}"></script>-->
+<!--<script>-->
+<!--    window.onload = function() {-->
+<!--        let dates = document.getElementsByClassName("created-date");-->
+<!--        for (let d of dates)-->
+<!--            d.innerText = moment(d.innerText).locale('vi').fromNow();-->
+<!--    }-->
+<!--</script>-->
+{% endblock %}
